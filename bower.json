@@ -1,0 +1,7 @@
+{
+  "name": "front-end-project",
+  "private": true,
+  "dependencies": {
+    "commonjs-require": "~1.4.5"
+  }
+}
