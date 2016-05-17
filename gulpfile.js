@@ -48,7 +48,7 @@
       .pipe(dust())
       .pipe($.concat('templates.js'))
       .pipe(gulp.dest('dist/scripts/'))
-      .pipe(notify('Minification Complete'))
+      //.pipe(notify('Minification Complete'))
       .pipe(reload({stream: true}));
   });
 

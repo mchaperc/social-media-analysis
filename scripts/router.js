@@ -1,4 +1,6 @@
-import TestView from './views/test';
+import ActorCollectionView from './views/actor-collection-view';
+import {actorModel} from '../models/actor-model';
+import {actorCollection} from '../collections/actor-collection';
 
 export default Marionette.AppRouter.extend({
 	routes: {
@@ -10,7 +12,10 @@ export default Marionette.AppRouter.extend({
 	},
 
 	index: function() {
-		var test = new TestView();
-		this.app.getRegion('main').show(test);
+		let actorData = new actorCollection();
+		actorData.fetch().then(function(data) {
+			let actorView = new ActorCollectionView({collection: actorData});
+			this.app.getRegion('main').show(actorView);
+		}.bind(this));
 	}
 });
