@@ -1,14 +1,49 @@
-<div class="col s12 m4 l3">
-  <div class="card">
-    <div class="card-image">
-      <img src="{actor_avator}">
-      <span class="card-title blue truncate">{actor_name}</span>
+<div class="col s12 push-m1 m10 l8 push-l2 activity-container z-depth-1">
+  <div class="row">
+    <div class="col s3 m2 l1 actor-short">
+      <a href="{actor_url}">
+        <img class="actor-short-img" src="{actor_avator}" alt="{actor_description}">
+        <p class="actor-short-name truncate">{actor_username}</p>
+      </a>
     </div>
-    <div class="card-content">
-      <p class="truncate">{activity_message}</p>
-    </div>
-    <div class="card-action">
-      <a class="waves-effect waves-light btn trigger-modal white-text blue" href="#modal{id}" data-target="modal{id}">More info</a>
-    </div>
+    <div class=" col s9 m11 activity-content">
+      <h6 class="activity-header"><a href="{actor_url}">{actor_name}</a> shared, via <a href="http://{provider}.com"><i class="fa fa-{provider}"></i> ({provider})</a>, the following{?activity_location} from {activity_location}{/activity_location} on {date}:</h6>
+      <div class="activity-content-inner-content col m5 s10">
+        <p class="activity-content-inner-content-message">{activity_message}</p>
+        {?activity_attachment}
+          <img class="activity-attachment" src="{activity_attachment}" alt="{activity_description}">
+        {/activity_attachment}
+      </div>
+      <div class="activity-content-inner-comment col l6 m5 hide-on-small-only">
+        <form action="">
+          <label for="comment-content">Leave a comment for {actor_username}:</label>
+          <textarea name="comment-content" id="" cols="30" rows="30" required></textarea>
+          <button class="submit-comment btn waves-effect waves-light">Post</button>
+        </form>
+      </div>
+      <div class="activity-buzz">
+        <ul class="activity-buzz-list">
+          <li class="activity-buzz-list-item">
+            {^liked}
+              <i class="fa fa-heart-o"></i>
+            {:else}
+              <i class="fa fa-heart"></i>
+            {/liked}
+            <p>{activity_likes}</p>
+          </li>
+          <li class="activity-buzz-list-item">
+            <a class="waves-effect waves-light trigger-modal" href="#modal{id}">
+              <i class="fa fa-mail-forward"></i>
+            </a>
+            <p>{activity_shares}</p>
+          </li>
+          <li class="activity-buzz-list-item">
+            <i class="fa fa-comment-o"></i>
+            <p>{activity_comments}</p>
+          </li>
+        </ul>
+      </div>
+    </div>  
   </div>
 </div>
+

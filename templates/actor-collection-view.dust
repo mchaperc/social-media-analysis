@@ -1,15 +1,29 @@
-<nav class="blue">
+<nav class="grey darken-3">
   <div class="nav-wrapper">
     <a href="#" class="brand-logo">MC's Social Media Analysis</a>
     <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <li><a href="#">Link</a></li>
+      <li><a href="https://github.com/mchaperc/social-media-analysis/tree/develop">Repo for this project</a></li>
     </ul>
   </div>
 </nav>
 
 <div class="row actor-container">
-  <h5 class="right-align">Now showing results <span class="beginning-index">{beginningIndex}</span> through <span class="ending-index">{endingIndex}</span></h5>
+  <h6 class="right-align results-count">
+  	Now showing results <span class="beginning-index">{beginningIndex}</span> through <span class="ending-index">{endingIndex}</span>
+  </h6>
   <ul>
   
   </ul>
 </div>
+
+<ul class="pagination">
+	<li class="disabled"><a href="#" class="next-page"><i class="fa fa-angle-left"></i></a></li>
+	{#pages}
+		<li class="waves-effect">
+			<a href="#" class="page-num" id="{$idx}">
+				{$idx}
+			</a>
+		</li>
+	{/pages}
+	<li class="waves-effect"><a href="#" class="next-page"><i class="fa fa-angle-right"></i></a></li>
+</ul>

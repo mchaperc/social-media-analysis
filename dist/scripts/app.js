@@ -148,17 +148,28 @@ exports['default'] = Marionette.CompositeView.extend({
   template: 'actor-collection-view.dust',
   childView: _actorItemView2['default'],
   childViewContainer: '.row > ul',
+  events: {
+    'click .page-num': 'changePage'
+  },
   initialize: function initialize() {
     this.originalCollection = this.collection;
   },
   filter: function filter(child, index, collection) {
-    return index < this.selectedIndices + 25;
+    return index > this.selectedIndices && index < this.selectedIndices + 25;
   },
   templateHelpers: function templateHelpers() {
+    var pageNums = Math.ceil(this.originalCollection.models.length / 25) || 0;
     return {
       beginningIndex: this.selectedIndices + 1,
-      endingIndex: this.selectedIndices + 25
+      endingIndex: this.selectedIndices + 25,
+      pages: new Array(pageNums)
     };
+  },
+  changePage: function changePage(e) {
+    e.preventDefault();
+    var targetPage = e && e.target && e.target.id || 0;
+    this.selectedIndices = targetPage * 25;
+    this.render();
   },
   selectedIndices: 0
 });
@@ -184,11 +195,52 @@ exports['default'] = Marionette.ItemView.extend({
 	template: 'actor-item-view.dust',
 	tagName: 'li',
 	events: {
-		'click .trigger-modal': 'openModal'
+		'click .trigger-modal': 'openModal',
+		'click .fa-heart': 'unLikePost',
+		'click .fa-heart-o': 'likePost',
+		'submit form': 'submitComment'
 	},
-	initialize: function initialize() {},
+	ui: {
+		'likeLink': '.like-link'
+	},
+	initialize: function initialize() {
+		this.listenTo(this.model, 'change', this.render);
+		if (!this.model.get('liked')) {
+			this.model.set('liked', false);
+		}
+		var eventsChannel = Backbone.Radio.channel('eventsChannel');
+		this.listenTo(eventsChannel, 'shared:post', this.sharedPost);
+	},
 	onShow: function onShow() {
-		$('.modal-trigger').leanModal();
+		eventDelegation: {}
+	},
+	templateHelpers: function templateHelpers() {
+		var date = this.model.get('activity_date').split('');
+		var temp = date.splice(0, 4);
+		temp.unshift('-');
+		date.shift('-');
+		date = date.concat(temp);
+		return {
+			date: date.join('')
+		};
+	},
+	likePost: function likePost(e) {
+		e.preventDefault();
+		!this.model.get('liked') ? this.model.set('activity_likes', this.model.get('activity_likes') + 1) && this.model.set('liked', true) : this.model.set('activity_likes', this.model.get('activity_likes') - 1) && this.model.set('liked', false);
+		this.$('.fa-heart-o').addClass('fa-heart');
+		this.$('.fa-heart-o').removeClass('fa-heart-o');
+	},
+	unLikePost: function unLikePost(e) {
+		e.preventDefault();
+		!this.model.get('liked') ? this.model.set('activity_likes', this.model.get('activity_likes') + 1) && this.model.set('liked', true) : this.model.set('activity_likes', this.model.get('activity_likes') - 1) && this.model.set('liked', false);
+		this.$('.fa-heart').addClass('fa-heart-o');
+		this.$('.fa-heart').removeClass('fa-heart');
+	},
+	submitComment: function submitComment(e) {
+		e.preventDefault();
+		if (this.$('textarea').val()) {
+			this.model.set('activity_comments', this.model.get('activity_comments') + 1);
+		}
 	},
 	openModal: function openModal(e) {
 		e.preventDefault();
@@ -196,7 +248,11 @@ exports['default'] = Marionette.ItemView.extend({
 		this.modalView.render();
 		$('body').append(this.modalView.el);
 		$('#modal' + this.model.get('id')).openModal();
+	},
+	sharedPost: function sharedPost() {
+		this.model.set('activity_shares', this.model.get('activity_shares') + 1);
 	}
+
 });
 module.exports = exports['default'];
   
@@ -213,15 +269,35 @@ exports['default'] = Marionette.ItemView.extend({
 	template: 'modal.dust',
 	className: 'modal-container',
 	events: {
-		'click .close-modal': 'modalDestroy'
+		'click .cancel-share': 'modalDestroy',
+		'click .more-inputs': 'moreInputs',
+		'click .share-post': 'sharePost'
 	},
-	initialize: function initialize() {
-		console.log('hello');
-	},
+	initialize: function initialize() {},
 	modalDestroy: function modalDestroy(e) {
-		e.preventDefault();
+		e && e.preventDefault();
 		$('#modal' + this.model.get('id')).closeModal();
 		this.destroy();
+	},
+	sharePost: function sharePost(e) {
+		e.preventDefault();
+		var isValid = true;
+		if (this.checkValidation()) {
+			Backbone.Radio.trigger('eventsChannel', 'shared:post');
+			this.modalDestroy();
+		}
+	},
+	moreInputs: function moreInputs(e) {
+		e.preventDefault();
+		$('#modal' + this.model.get('id') + ' .input-field').append('<input class="validate" type="email" id="emailInput" required>');
+	},
+	checkValidation: function checkValidation() {
+		var isValid = true;
+		$('#emailInput').each(function (idx, val) {
+			var emailVal = $(val).val();
+			emailVal && emailVal.indexOf('@') > -1 && emailVal.indexOf('.') > -1 ? null : isValid = false;
+		});
+		return isValid;
 	}
 
 });
