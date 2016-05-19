@@ -1,7 +1,7 @@
 <nav class="grey darken-3">
   <div class="nav-wrapper">
-    <a href="#" class="brand-logo">MC's Social Media Analysis</a>
-    <ul id="nav-mobile" class="right hide-on-med-and-down">
+    <a href="#" class="brand-logo truncate hide-on-small-only">MC's Social Media Analysis</a>
+    <ul id="nav-mobile" class="right">
       <li><a href="https://github.com/mchaperc/social-media-analysis/tree/develop">Repo for this project</a></li>
     </ul>
   </div>

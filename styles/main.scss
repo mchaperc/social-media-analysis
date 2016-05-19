@@ -116,3 +116,16 @@ a.brand-logo, h6 {
 		margin-right: 15px;
 	}
 }
+
+@media (max-width: 760px) {
+	.activity-content-inner-comment {
+		display: block;
+		margin-top: 15px;
+	}
+	.modal {
+		.more-inputs, .close-modal {
+			margin: 15px auto;
+			width: 100%;
+		}
+	}	
+}

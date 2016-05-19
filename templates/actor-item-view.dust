@@ -1,12 +1,12 @@
-<div class="col s12 push-m1 m10 l8 push-l2 activity-container z-depth-1">
+<div class="col s12 push-m1 m10 l8 push-l2 activity-container z-depth-2">
   <div class="row">
-    <div class="col s3 m2 l1 actor-short">
+    <div class="col s12 m2 l1 actor-short">
       <a href="{actor_url}">
         <img class="actor-short-img" src="{actor_avator}" alt="{actor_description}">
         <p class="actor-short-name truncate">{actor_username}</p>
       </a>
     </div>
-    <div class=" col s9 m11 activity-content">
+    <div class=" col s12 m11 activity-content">
       <h6 class="activity-header"><a href="{actor_url}">{actor_name}</a> shared, via <a href="http://{provider}.com"><i class="fa fa-{provider}"></i> ({provider})</a>, the following{?activity_location} from {activity_location}{/activity_location} on {date}:</h6>
       <div class="activity-content-inner-content col m5 s10">
         <p class="activity-content-inner-content-message">{activity_message}</p>
@@ -14,7 +14,7 @@
           <img class="activity-attachment" src="{activity_attachment}" alt="{activity_description}">
         {/activity_attachment}
       </div>
-      <div class="activity-content-inner-comment col l6 m5 hide-on-small-only">
+      <div class="activity-content-inner-comment col l6 m5">
         <form action="">
           <label for="comment-content">Leave a comment for {actor_username}:</label>
           <textarea name="comment-content" id="" cols="30" rows="30" required></textarea>
